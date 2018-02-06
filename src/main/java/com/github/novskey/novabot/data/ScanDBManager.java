@@ -511,6 +511,9 @@ public class ScanDBManager  {
                       "       height," +
                       "       gender," +
                       "       form," +
+                      "       catch_prob_1," +
+                      "       catch_prob_2," +
+                      "       catch_prob_3," +
                       "       cp, " +
                       "       cp_multiplier, " +
                       "       weather_boosted_condition " +
@@ -623,10 +626,12 @@ public class ScanDBManager  {
                         height = rs.getFloat(11);
                         gender = (Integer) rs.getObject(12);
                         form = (Integer) rs.getObject(13);
-                        cp = (Integer) rs.getObject(14);
-                        cpMod = rs.getDouble(15);
-                        float catchprob1 = rs.getFloat(16);
-                        int weather = rs.getInt(17);
+                        float catchprob1 = rs.getFloat(14);
+                        float catchprob2 = rs.getFloat(15);
+                        float catchprob3 = rs.getFloat(16);
+                        cp = (Integer) rs.getObject(17);
+                        cpMod = rs.getDouble(18);
+                        int weather = rs.getInt(19);
                         pokeSpawn = new PokeSpawn(id, lat, lon, disappearTime, attack, defense, stamina, move1, move2, weight, height, gender, form, cp, cpMod, catchprob1, weather);
                         break;
                     case PhilMap:
