@@ -138,6 +138,15 @@ public class PokeSpawn extends Spawn
 
         getProperties().put("lvl30cp", cp == null ? "?" : String.valueOf(Pokemon.maxCpAtLevel(id, 30)));
         getProperties().put("lvl35cp", cp == null ? "?" : String.valueOf(Pokemon.maxCpAtLevel(id, 35)));
+		
+		this.catchprob1 = catchprob1;
+        getProperties().put("catchprob1", getCatchprob1());
+		
+		this.catchprob2 = catchprob2;
+        getProperties().put("catchprob2", getCatchprob2());
+		
+		this.catchprob3 = catchprob3;
+        getProperties().put("catchprob3", getCatchprob3());
 
         getProperties().put("weather","unkn");
         getProperties().put("weather_icon","");
@@ -172,16 +181,16 @@ public class PokeSpawn extends Spawn
             getProperties().replace("weather_icon", w.getEmote());
         }
     }
-
-    public PokeSpawn(int id, double lat, double lon, ZonedDateTime disappearTime, Integer attack, Integer defense, Integer stamina, Integer move1, Integer move2, float weight, float height, Integer gender, Integer form, Integer cp, double cpMod, float catchprob1, int weather) {
-        this(id,lat,lon,disappearTime,attack,defense,stamina,move1,move2,weight,height,gender,form,cp,cpMod);
-        getProperties().put("catchprob1",String.valueOf(catchprob1));
+	
+    public PokeSpawn(int id, double lat, double lon, ZonedDateTime disappearTime, Integer attack, Integer defense, Integer stamina, Integer move1, Integer move2, float weight, float height, Integer gender, Integer form, Integer cp, double cpMod, float catchprob1, float catchprob2, float catchprob3 int weather) {
+        this(id,lat,lon,disappearTime,attack,defense,stamina,move1,move2,weight,height,gender,form,cp,cpMod,catchprob1,catchprob2,catchprob3);
         Weather w = Weather.fromId(weather);
         if (w != null) {
             getProperties().replace("weather", w.toString());
             getProperties().replace("weather_icon", w.getEmote());
         }
     }
+
 
     public Message buildMessage(String formatFile) {
         if(builtMessages.get(formatFile) == null) {
