@@ -40,9 +40,9 @@ public class PokeSpawn extends Spawn
     private Float height;
     private Integer gender;
     private String suburb;
-    private Integer iv_attack;
-    private Integer iv_defense;
-    private Integer iv_stamina;
+    public Integer iv_attack;
+    public Integer iv_defense;
+    public Integer iv_stamina;
 
     public Float catchprob1;
     public Float catchprob2;
@@ -66,8 +66,6 @@ public class PokeSpawn extends Spawn
 
         this.lon = lon;
         getProperties().put("lng", String.valueOf(lon));
-
-        getProperties().put("time_left",timeLeft());
 
         this.id = id;
         getProperties().put("pkmn_id", String.valueOf(id));
@@ -201,6 +199,8 @@ public class PokeSpawn extends Spawn
 
     public Message buildMessage(String formatFile) {
         if(builtMessages.get(formatFile) == null) {
+
+            getProperties().put("time_left",timeLeft());
 
             if (!getProperties().containsKey("city")) {
                 this.setGeocodedLocation(novaBot.reverseGeocoder.geocodedLocation(lat, lon));
