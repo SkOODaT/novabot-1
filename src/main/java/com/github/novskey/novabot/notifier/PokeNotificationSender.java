@@ -50,17 +50,19 @@ public class PokeNotificationSender extends NotificationSender implements Runnab
                 }
 
                 HashSet<String> toNotify = new HashSet<>(novaBot.dataManager.getUserIDsToNotify(pokeSpawn));
+                System.out.println(toNotify);
 
                 ArrayList<String> matchingPresets = novaBot.getConfig().findMatchingPresets(pokeSpawn);
 
                 for (String preset : matchingPresets) {
                     toNotify.addAll(novaBot.dataManager.getUserIDsToNotify(preset, pokeSpawn));
                 }
+                System.out.println(toNotify);
 
                 if (toNotify.size() == 0) {
                     localLog.info("no-one wants this pokemon");
                 } else {
-                    final Message message = pokeSpawn.buildMessage("formatting.ini");
+                    final Message message = pokeSpawn.buildMessage(novaBot.getFormatting());
                     localLog.info("Built message for pokespawn");
 
                     toNotify.forEach(userID -> this.notifyUser(userID, message));

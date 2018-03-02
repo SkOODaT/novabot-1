@@ -1,14 +1,10 @@
 package com.github.novskey.novabot.pokemon;
 
 import com.github.novskey.novabot.core.Location;
-import com.github.novskey.novabot.core.NovaBot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.PrivateChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +25,7 @@ public class Pokemon {
     private static JsonObject baseStats;
     private static JsonObject pokemonInfo;
     private static JsonObject movesInfo;
+    private static JsonObject formInfo;
 
     private static final Logger LOGGER = LoggerFactory.getLogger("Pokemon");
 
@@ -69,6 +66,17 @@ public class Pokemon {
                 }
             } catch (FileNotFoundException e) {
                 LOGGER.error("Couldn't find static/data/moves.json, aborting");
+                System.exit(0);
+            }
+
+            try{
+                element = parser.parse(new FileReader("static/data/forms.json"));
+
+                if (element.isJsonObject()) {
+                    formInfo = element.getAsJsonObject();
+                }
+            } catch (FileNotFoundException e) {
+                LOGGER.error("Couldn't find static/data/forms.json, aborting");
                 System.exit(0);
             }
 
@@ -150,15 +158,14 @@ public class Pokemon {
         return nameToID(this.name);
     }
 
-    public static String getIcon(final int id) {
+    public static String getIcon(final int id, Integer form) {
         String url = "https://bitbucket.org/SkOODaT/skoodatshuffle/raw/master/";
-        if (id >= 2011) {
-            final int form = id % 201;
-            url = url +  "201_" + form;
+        if (form != null && form != 0) {
+            url = url + id + "_" + form;
         } else {
             url += id;
         }
-        return url + ".png?2";
+        return url + ".png?4";
     }
 
     public Location getLocation() {
@@ -317,20 +324,24 @@ public class Pokemon {
         }
     }
 
-    public static Character intToForm(final Integer i) {
-        if (i == 0) {
-            return null;
+    public static String formToString(final Integer id, Integer form) {
+        if (form == null || form == 0){
+            return "";
         }
-        if (i <= 26) {
-            return (char) (64 + i);
+
+        JsonObject pokemonForms = formInfo.getAsJsonObject(Integer.toString(id));
+
+        if (pokemonForms == null){
+            return "";
         }
-        if (i == 27) {
-            return '?';
+
+        JsonElement formName = pokemonForms.get(Integer.toString(form));
+
+        if (formName == null){
+            return "";
         }
-        if (i == 28) {
-            return '!';
-        }
-        return null;
+
+        return formName.getAsString();
     }
 
     public static String listToString(final Pokemon[] pokemon) {
@@ -465,20 +476,31 @@ public class Pokemon {
     }
 
     public static void main(String[] args) {
-        NovaBot novaBot = new NovaBot();
-        novaBot.setup();
-        novaBot.start();
-        PrivateChannel channel = novaBot.jda.getUserById("107730875596169216").openPrivateChannel().complete();
-        PrivateChannel channel1 = novaBot.jda.getUserById("234884844780257282").openPrivateChannel().complete();
 
-        for (int id = 1; id <= 30; id++) {
-            MessageBuilder builder = new MessageBuilder(getFilterName(id));
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setThumbnail(getIcon(id));
-            builder.setEmbed(embedBuilder.build());
-            channel.sendMessage(builder.build()).queue();
-            channel1.sendMessage(builder.build()).queue();
+        for (Integer integer : new Integer[]{13, 16, 19, 21, 23, 29, 32, 41, 48, 60, 98, 118, 120, 161, 163, 165, 167, 177, 183, 194}) {
+            System.out.println(Pokemon.idToName(integer));
         }
+
+//        NovaBot novaBot = new NovaBot();
+//        novaBot.setup();
+//        novaBot.start();
+//        PrivateChannel channel = novaBot.jda.getUserById("107730875596169216").openPrivateChannel().complete();
+//
+//        ArrayList<Pair<Integer,Integer>> pairs = new ArrayList<>();
+//        pairs.add(Pair.of(351,29));
+//        pairs.add(Pair.of(351,30));
+//        pairs.add(Pair.of(351,31));
+//        pairs.add(Pair.of(351,32));
+//        pairs.add(Pair.of(351,0));
+//        pairs.add(Pair.of(351,null));
+//
+//        for (Pair<Integer, Integer> pair : pairs) {
+//            MessageBuilder builder = new MessageBuilder(getFilterName(pair.getKey()) + " " + formToString(pair.getKey(), pair.getValue()));
+//            EmbedBuilder embedBuilder = new EmbedBuilder();
+//            embedBuilder.setThumbnail(getIcon(pair.getKey(),pair.getValue()));
+//            builder.setEmbed(embedBuilder.build());
+//            channel.sendMessage(builder.build()).queue();
+//        }
 
     }
 

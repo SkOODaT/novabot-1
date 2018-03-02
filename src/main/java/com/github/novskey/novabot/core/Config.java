@@ -176,6 +176,10 @@ public class Config {
         return matchesFilter(globalFilter,pokeSpawn,"global");
     }
 
+    public boolean showColor(String formatFile, String formatKey) {
+        return Boolean.parseBoolean(formats.get(formatFile).getFormatting(formatKey, "showColor"));
+    }
+
     public boolean useGlobalFilter() {
         return globalFilter != null;
     }

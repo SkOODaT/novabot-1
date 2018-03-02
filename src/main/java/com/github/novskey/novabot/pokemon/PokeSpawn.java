@@ -33,6 +33,7 @@ public class PokeSpawn extends Spawn
     public ZonedDateTime disappearTime;
     public String form;
     public Integer id;
+    public Integer formId;
     public Float iv;
     public Integer cp;
     public Integer level;
@@ -58,6 +59,7 @@ public class PokeSpawn extends Spawn
         super();
         this.disappearTime = null;
         this.form = null;
+        this.formId = form;
         this.suburb = null;
         this.disappearTime = disappearTime;
 
@@ -126,11 +128,8 @@ public class PokeSpawn extends Spawn
         this.gender = gender;
         getProperties().put("gender", getGender());
 
-        if (form != null && form != 0 && id == 201) {
-            this.id = id * 10 + form;
-        }
-        if (form != null) {
-            this.form = ((Pokemon.intToForm(form) == null) ? null : String.valueOf(Pokemon.intToForm(form)));
+        if (form != null && form != 0) {
+            this.form = ((Pokemon.formToString(id,form) == null) ? null : String.valueOf(Pokemon.formToString(id,form)));
         }
         getProperties().put("form", (this.form == null ? "" : this.form));
 
@@ -142,6 +141,7 @@ public class PokeSpawn extends Spawn
 
         getProperties().put("weather","unkn");
         getProperties().put("weather_icon","");
+        getProperties().put("encounter_id","");
     }
 
     public PokeSpawn(final int id, final double lat, final double lon, final ZonedDateTime disappearTime, final Integer attack, final Integer defense, final Integer stamina, final Integer move1, final Integer move2, final float weight, final float height, final Integer gender, final Integer form, Integer cp, double cpModifier) {
@@ -156,13 +156,14 @@ public class PokeSpawn extends Spawn
         getProperties().put("level", String.valueOf(level));
     }
 
-    public PokeSpawn(int id, double lat, double lon, ZonedDateTime disappearTime, Integer attack, Integer defense, Integer stamina, Integer move1, Integer move2, int weight, int height, Integer gender, Integer form, Integer cp, Integer level, int weather) {
+    public PokeSpawn(int id, double lat, double lon, ZonedDateTime disappearTime, Integer attack, Integer defense, Integer stamina, Integer move1, Integer move2, int weight, int height, Integer gender, Integer form, Integer cp, Integer level, int weather, String encounter_id) {
         this(id,lat,lon,disappearTime,attack,defense,stamina,move1,move2,weight,height,gender,form,cp,level);
         Weather w = Weather.fromId(weather);
         if (w != null) {
             getProperties().replace("weather", w.toString());
             getProperties().replace("weather_icon", w.getEmote());
         }
+        getProperties().replace("encounter_id",encounter_id);
     }
 
     public PokeSpawn(int id, double lat, double lon, ZonedDateTime disappearTime, Integer attack, Integer defense, Integer stamina, Integer move1, Integer move2, float weight, float height, Integer gender, Integer form, Integer cp, double cpMod, int weather) {
@@ -222,7 +223,7 @@ public class PokeSpawn extends Spawn
             embedBuilder.setColor(getColor());
             embedBuilder.setTitle(novaBot.getConfig().formatStr(getProperties(), (encountered()) ? novaBot.getConfig().getEncounterTitleFormatting(formatFile) : (novaBot.getConfig().getTitleFormatting(formatFile, "pokemon"))), novaBot.getConfig().formatStr(getProperties(), novaBot.getConfig().getTitleUrl(formatFile, "pokemon")));
             embedBuilder.setDescription(novaBot.getConfig().formatStr(getProperties(), (encountered()) ? novaBot.getConfig().getEncounterBodyFormatting(formatFile) : novaBot.getConfig().getBodyFormatting(formatFile, "pokemon")));
-            embedBuilder.setThumbnail(Pokemon.getIcon(this.id));
+            embedBuilder.setThumbnail(Pokemon.getIcon(this.id,this.formId));
             if (novaBot.getConfig().showMap(formatFile, "pokemon")) {
                 embedBuilder.setImage(this.getImage(formatFile));
             }

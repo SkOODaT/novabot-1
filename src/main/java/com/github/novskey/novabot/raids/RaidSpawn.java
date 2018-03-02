@@ -215,7 +215,7 @@ public class RaidSpawn extends Spawn {
                     return LEGENDARY_EGG;
             }
         }
-        return Pokemon.getIcon(bossId);
+        return Pokemon.getIcon(bossId, null);
     }
 
     public String getLobbyCode() {
