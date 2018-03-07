@@ -40,6 +40,7 @@ public class RaidSpawn extends Spawn {
     private String imageUrl;
     private int lobbyCode;
 
+    public int park;
 
     public RaidSpawn(int id, boolean egg) {
         super();
@@ -105,6 +106,20 @@ public class RaidSpawn extends Spawn {
         getProperties().put("level", String.valueOf(raidLevel));
 
         getProperties().put("lobbycode", "unkn");
+    }
+
+    public RaidSpawn(String name, String gymId, double lat, double lon, Team team, int park, ZonedDateTime raidEnd, ZonedDateTime battleStart, int bossId, int bossCp, int move_1, int move_2, int raidLevel) {
+        this(name,gymId,lat,lon,team,raidEnd,battleStart,bossId,bossCp,move_1,move_2,raidLevel);
+        this.park = park;
+        getProperties().put("park", park());
+    }
+
+    private String park() {
+        if (park == 1) {
+            return "***This Gym Is A Possible EX Raid Location***";
+        } else {
+            return "";
+        }
     }
 
     public String timeLeft(ZonedDateTime until) {

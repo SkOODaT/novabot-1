@@ -189,6 +189,7 @@ public class ScanDBManager  {
                       "  gym.latitude," +
                       "  gym.longitude," +
                       "  gym.team_id," +
+                      "  gym.park," +
                       "  raid.end AS end," +
                       "  raid.start AS battle," +
                       "  raid.pokemon_id," +
@@ -322,15 +323,16 @@ public class ScanDBManager  {
                         double lat = rs.getDouble(3);
                         double lon = rs.getDouble(4);
                         Team team = Team.fromId(rs.getInt(5));
-                        ZonedDateTime raidEnd = ZonedDateTime.ofLocal(rs.getTimestamp(6).toLocalDateTime(), UtilityFunctions.UTC, null);
-                        ZonedDateTime battleStart = ZonedDateTime.ofLocal(rs.getTimestamp(7).toLocalDateTime(), UtilityFunctions.UTC, null);
-                        int bossId = rs.getInt(8);
-                        int bossCp = rs.getInt(9);
-                        int raidLevel = rs.getInt(10);
-                        int move_1 = rs.getInt(11);
-                        int move_2 = rs.getInt(12);
+                        int park = rs.getInt(6);
+                        ZonedDateTime raidEnd = ZonedDateTime.ofLocal(rs.getTimestamp(7).toLocalDateTime(), UtilityFunctions.UTC, null);
+                        ZonedDateTime battleStart = ZonedDateTime.ofLocal(rs.getTimestamp(8).toLocalDateTime(), UtilityFunctions.UTC, null);
+                        int bossId = rs.getInt(9);
+                        int bossCp = rs.getInt(10);
+                        int raidLevel = rs.getInt(11);
+                        int move_1 = rs.getInt(12);
+                        int move_2 = rs.getInt(13);
 
-                        raidSpawn = new RaidSpawn(name, gymId, lat, lon, team, raidEnd, battleStart, bossId, bossCp, move_1, move_2, raidLevel);
+                        raidSpawn = new RaidSpawn(name, gymId, lat, lon, team, park, raidEnd, battleStart, bossId, bossCp, move_1, move_2, raidLevel);
                         break;
                     case Hydro74000Monocle:
                         name = rs.getString(1);
