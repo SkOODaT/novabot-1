@@ -50,8 +50,6 @@ public class PokeNotificationSender extends NotificationSender implements Runnab
                 }
 
                 HashSet<String> toNotify = new HashSet<>(novaBot.dataManager.getUserIDsToNotify(pokeSpawn));
-                System.out.println(toNotify);
-
                 ArrayList<String> matchingPresets = novaBot.getConfig().findMatchingPresets(pokeSpawn);
 
                 for (String preset : matchingPresets) {

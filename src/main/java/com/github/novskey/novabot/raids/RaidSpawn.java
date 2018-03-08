@@ -178,7 +178,7 @@ public class RaidSpawn extends Spawn {
 
             final MessageBuilder messageBuilder = new MessageBuilder();
             final EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setColor(getColor());
+            embedBuilder.setColor(getColor(formatFile));
 
             if (bossId == 0) {
                 formatKey = "raidEgg";
@@ -284,20 +284,24 @@ public class RaidSpawn extends Spawn {
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", name, gymId, lat, lon, raidEnd, battleStart, bossId, bossCp, raidLevel, getMove_1(), getMove_2());
     }
 
-    private Color getColor() {
-        switch (raidLevel) {
-            case 1:
-                return new Color(0x9d9d9d);
-            case 2:
-                return new Color(0xdb3b78);
-            case 3:
-                return new Color(0xff8000);
-            case 4:
-                return new Color(0xffe100);
-            case 5:
-                return new Color(0x00082d);
+    private Color getColor(String formatFile) {
+        if (novaBot.getConfig().showColor(formatFile, "pokemon")) {
+            switch (raidLevel) {
+                case 1:
+                    return new Color(0x9d9d9d);
+                case 2:
+                    return new Color(0xdb3b78);
+                case 3:
+                    return new Color(0xff8000);
+                case 4:
+                    return new Color(0xffe100);
+                case 5:
+                    return new Color(0x00082d);
+            }
+            return Color.WHITE;
+        }else {
+            return Color.GRAY;
         }
-        return Color.WHITE;
     }
 
     @Override
